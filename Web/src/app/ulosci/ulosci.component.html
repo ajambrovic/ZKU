@@ -1,11 +1,46 @@
-<form>
-  <label for="cestice">Vrsta čestica</label>
-  <select id="cestice">
-        <option>Odaberite</option>
-        <option value="harmonised">Harmonizirane</option>
-        <option value="unharmonised">Neharmonizirane</option>
-      </select>
-  <label for="vlasnici">Naziv vlasnika</label>
-  <input type="text" id="vlasnici" />
-  <input type="button" value="Pretraži">
-</form>
+<div class="row">
+  <div class="col-md-12">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="institutions">Institucije</label>
+        <select formControlName="institucije" class="form-control" (change)="onInstitucijeChange($event.target.value)">
+              <option>Odaberite</option>
+              <option *ngFor="let institution of institutions" [value]="institution['institutionId']">{{institution['name']}} ({{institution['institutionId']}})</option>
+            </select>
+      </div>
+      <div class="form-group">
+        <label for="glavnaKnjiga">Glavna knjiga</label>
+        <select formControlName="glavnaKnjiga" class="form-control">
+                <option>Odaberite</option>
+                <option *ngFor="let mainBook of mainBooks" [value]="mainBook['id']">{{mainBook['name']}} ({{mainBook['id']}})</option>
+              </select>
+      </div>
+
+      <div class="form-group">
+        <label for="cestice">Čestice</label>
+        <select formControlName="cestice" class="form-control">
+          <option>Odaberite</option>
+          <option value="1">Harmonizirane</option>
+          <option value="2">Neharmonizirane</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="vlasnik">Vlasnik</label>
+        <input type="text" class="form-control" formControlName="vlasnik">
+      </div>
+
+      <button type="submit" class="btn btn-success">Pretraži</button>
+    </form>
+  </div>
+</div>
+<div class="row" id="response">
+  <button *ngIf="loading" class="btn btn-lg btn-warning">
+        <span class="glyphicon glyphicon-refresh spinning"></span> Učitavanje...    
+    </button>
+  <button *ngIf="error" class="btn btn-lg btn-danger">
+     {{error}}
+    </button>
+  <ng-container *ngIf="ulosci">{{ulosci.length}}</ng-container>
+  <div *ngFor="let obj of ulosci" class="col-xs-12">{{obj | json}} </div>
+</div>
