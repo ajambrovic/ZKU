@@ -33,7 +33,7 @@ module.exports = {
             findCondition['possessionSheetA1.lrParcels.parcelId'] = Number(brojCestice);
         }
         console.log(findCondition);
-        Ulozak.find(findCondition, "harmonisationStatus mainBook.institution.institutionId ownershipSheetB.lrUnitShares.lrOwners.person.name")
+        Ulozak.find(findCondition, "harmonisationStatus mainBook.institution.institutionId ownershipSheetB.lrUnitShares.lrOwners.person.name").limit(500)
             .then((ulosci) => {
                 res.end(JSON.stringify(ulosci));
             });

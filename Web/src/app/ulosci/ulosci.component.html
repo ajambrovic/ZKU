@@ -51,6 +51,11 @@
   <button *ngIf="error" class="btn btn-lg btn-danger">
      {{error}}
     </button>
-  <ng-container *ngIf="ulosci">{{ulosci.length}}</ng-container>
+  <ng-container *ngIf="!!ulosci">
+    {{ulosci.length}}
+    <button (click)="print()" class="btn btn-success">Ispiši</button>
+  </ng-container>
+
   <div *ngFor="let obj of ulosci" class="col-xs-12">{{obj | json}} </div>
+
 </div>

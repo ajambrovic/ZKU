@@ -1,6 +1,7 @@
 import { UlosciService } from './ulosci.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+declare var jsPDF: any; // Important
 
 @Component({
   selector: 'app-ulosci',
@@ -51,5 +52,56 @@ export class UlosciComponent implements OnInit {
     this.usersService.getData(this.form.value).subscribe(
       itemData => { this.loading = false; this.ulosci = itemData; },
       error => { this.loading = false; this.error = error; });
+  }
+
+  isObject(o) {
+    return o instanceof Object && o.constructor === Object;
+  }
+
+  print() {
+    // Default export is a4 paper, portrait, using milimeters for units
+    const doc = new jsPDF();
+
+    const col = ['ID', 'ID institucije', 'Status harmonizacije', 'Vlasnici'];
+    const rows = [];
+
+    this.ulosci.forEach(ulozak => {
+      const row = [];
+      const that = this;
+      // tslint:disable-next-line:forin
+      for (const key in ulozak) {
+        if (that.isObject(ulozak[key]) && Object.keys(ulozak[key])) {
+          const subKey = ulozak[key][Object.keys(ulozak[key])[0]];
+          if (!!subKey && that.isObject(subKey) && Object.keys(subKey)) {
+            const value = subKey[Object.keys(subKey)[0]];
+            row.push(value);
+          } else {
+            const owners = [];
+            if (Array.isArray(subKey)) {
+              subKey.forEach(owner => {
+                if (!!owner && that.isObject(owner) && Object.keys(owner)) {
+                  const value = owner[Object.keys(owner)[0]][0];
+                  if (!!value && that.isObject(value) && Object.keys(value)) {
+                    const subValue = value[Object.keys(value)[0]];
+                    if (!!subValue && that.isObject(subValue) && Object.keys(subValue)) {
+                      const subSubValue = subValue[Object.keys(subValue)[0]];
+                      row.push(subSubValue);
+                    }
+                   
+                  }
+                }
+              });
+            }
+            row.push(owners);
+          }
+        } else {
+          row.push(ulozak[key]);
+        }
+      }
+      rows.push(row);
+    });
+
+    doc.autoTable(col, rows);
+    doc.save('a4.pdf');
   }
 }
