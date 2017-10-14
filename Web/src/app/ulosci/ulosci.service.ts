@@ -17,6 +17,8 @@ export class UlosciService {
     body.set('vlasnik', searchItems['vlasnik']);
     body.set('institucije', searchItems['institucije']);
     body.set('glavnaKnjiga', searchItems['glavnaKnjiga']);
+    body.set('brojUloska', searchItems['brojUloska']);
+    body.set('brojCestice', searchItems['brojCestice']);
     return this.http.post('http://localhost:3000/ulosci', body)
       .map(res => res.json())
       .catch(this._serverError);

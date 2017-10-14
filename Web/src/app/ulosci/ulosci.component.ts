@@ -15,8 +15,10 @@ export class UlosciComponent implements OnInit {
   form: FormGroup;
   cestice = new FormControl('');
   vlasnik = new FormControl('', );
-  institucije =  new FormControl('', );
-  glavnaKnjiga =  new FormControl('', );
+  institucije = new FormControl('', );
+  glavnaKnjiga = new FormControl('', );
+  brojUloska = new FormControl('', );
+  brojCestice = new FormControl('', );
   loading = false;
   error = false;
 
@@ -25,7 +27,9 @@ export class UlosciComponent implements OnInit {
       'cestice': this.cestice,
       'vlasnik': this.vlasnik,
       'institucije': this.institucije,
-      'glavnaKnjiga': this.glavnaKnjiga
+      'glavnaKnjiga': this.glavnaKnjiga,
+      'brojUloska': this.brojUloska,
+      'brojCestice': this.brojCestice
     });
   }
 
@@ -35,7 +39,7 @@ export class UlosciComponent implements OnInit {
     );
   }
 
-  onInstitucijeChange(id){
+  onInstitucijeChange(id) {
     this.usersService.getMainBooks(id).subscribe(
       itemData => { this.mainBooks = itemData; },
     );
